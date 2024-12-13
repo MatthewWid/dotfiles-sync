@@ -70,7 +70,7 @@ resource "aws_cloudwatch_log_group" "lambda" {
 # Zip source code
 data "archive_file" "lambda" {
   type        = "zip"
-  source_file = "main.js"
+  source_file = "dist/main.js"
   output_path = "lambda.zip"
 }
 

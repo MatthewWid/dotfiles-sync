@@ -1,0 +1,28 @@
+{
+	"name": "dotfiles-sync",
+	"version": "0.1.0",
+	"author": "Matthew W. <matthew.widdi@gmail.com>",
+	"license": "MIT",
+	"private": true,
+	"scripts": {
+		"start": "tsx ./src/main.ts",
+		"dev": "tsx watch ./src/main.ts",
+		"build": "esbuild ./src/handler.ts --bundle --platform=node --target=node22 --outfile=./dist/main.js",
+		"format": "biome check --linter-enabled=false --write",
+		"lint": "biome lint",
+		"ci": "biome ci"
+	},
+	"engines": {
+		"node": ">=22",
+		"pnpm": ">=9"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "1.9.4",
+		"@tsconfig/node22": "^22.0.0",
+		"@types/aws-lambda": "^8.10.146",
+		"@types/node": "^22.10.2",
+		"esbuild": "^0.24.0",
+		"tsx": "^4.19.2",
+		"typescript": "^5.7.2"
+	}
+}
