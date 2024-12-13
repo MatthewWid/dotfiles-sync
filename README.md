@@ -30,6 +30,7 @@ Use AWS [EventBridge](https://aws.amazon.com/eventbridge/) and [Lambda](https://
 6. Deploy to AWS with Terraform:
 
     ```bash
+    cd tf
     terraform init
     terraform apply
     ```
