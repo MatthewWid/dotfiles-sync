@@ -4,11 +4,12 @@
 	"author": "Matthew W. <matthew.widdi@gmail.com>",
 	"license": "MIT",
 	"private": true,
+	"type": "module",
 	"scripts": {
-		"start": "tsx ./src/main.ts",
-		"dev": "tsx watch ./src/main.ts",
+		"start": "tsx --env-file ./.env ./src/run.ts",
+		"dev": "tsx watch --env-file ./.env ./src/run.ts",
 		"build": "esbuild ./src/handler.ts --bundle --platform=node --target=node22 --outfile=./dist/main.js",
-		"format": "biome check --linter-enabled=false --write",
+		"format": "biome check --write",
 		"lint": "biome lint",
 		"ci": "biome ci"
 	},
@@ -24,5 +25,9 @@
 		"esbuild": "^0.24.0",
 		"tsx": "^4.19.2",
 		"typescript": "^5.7.2"
+	},
+	"dependencies": {
+		"dropbox": "^10.34.0",
+		"simple-git": "^3.27.0"
 	}
 }
