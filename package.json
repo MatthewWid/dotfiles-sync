@@ -4,21 +4,29 @@
 	"author": "Matthew W. <matthew.widdi@gmail.com>",
 	"license": "MIT",
 	"private": true,
+	"type": "module",
 	"scripts": {
-		"start": "tsx ./src/main.ts",
-		"dev": "tsx watch ./src/main.ts",
+		"start": "tsx --env-file ./.env ./src/run.ts",
+		"dev": "tsx watch --env-file ./.env ./src/run.ts",
 		"build": "esbuild ./src/handler.ts --bundle --platform=node --target=node22 --outfile=./dist/main.js",
-		"format": "biome check --linter-enabled=false --write",
+		"format": "biome check --write",
 		"lint": "biome lint",
-		"ci": "biome ci"
+		"ci": "biome ci",
+		"get-dropbox-refresh-token": "tsx --env-file ./.env ./src/cli/get-dropbox-refresh-token.ts"
 	},
 	"engines": {
 		"node": ">=22",
 		"pnpm": ">=9"
 	},
+	"dependencies": {
+		"adm-zip": "^0.5.16",
+		"dropbox": "^10.34.0",
+		"simple-git": "^3.27.0"
+	},
 	"devDependencies": {
 		"@biomejs/biome": "1.9.4",
 		"@tsconfig/node22": "^22.0.0",
+		"@types/adm-zip": "^0.5.7",
 		"@types/aws-lambda": "^8.10.146",
 		"@types/node": "^22.10.2",
 		"esbuild": "^0.24.0",
