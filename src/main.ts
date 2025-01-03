@@ -3,9 +3,16 @@ import { basename, join } from "node:path";
 import AdmZip from "adm-zip";
 import { getDropboxInstance } from "./lib/dropbox";
 import { getGitInstance } from "./lib/git";
+import { didDropboxFilesChange } from "./utils/did-dropbox-files-change";
+import { storeLatestDropboxCursor } from "./utils/store-latest-dropbox-cursor";
 
 export const main = async () => {
-	const dropbox = await getDropboxInstance();
+	const shouldRefetchFiles = await didDropboxFilesChange();
+
+	if (!shouldRefetchFiles) {
+		return;
+	}
+
 	const git = await getGitInstance();
 
 	if (exists(join(process.env.GIT_REPO_LOCAL_PATH, ".git"))) {
@@ -14,9 +21,11 @@ export const main = async () => {
 		await git.clone(
 			process.env.GIT_REPO_REMOTE_URL,
 			process.env.GIT_REPO_LOCAL_PATH,
-			["--no-checkout"]
+			["--no-checkout"],
 		);
 	}
+
+	const dropbox = await getDropboxInstance();
 
 	const downloadZipResponse = await dropbox.filesDownloadZip({
 		path: process.env.DROPBOX_DOTFILES_PATH,
@@ -28,7 +37,7 @@ export const main = async () => {
 
 	const extractedToPath = join(
 		process.env.GIT_REPO_LOCAL_PATH,
-		basename(process.env.DROPBOX_DOTFILES_PATH)
+		basename(process.env.DROPBOX_DOTFILES_PATH),
 	);
 
 	const { isClean } = await git.status(["--", extractedToPath]);
@@ -38,6 +47,8 @@ export const main = async () => {
 		await git.commit(`chore: automated backup - ${new Date().toUTCString()}`);
 		await git.push();
 	}
+
+	await storeLatestDropboxCursor();
 
 	/*
 	const entries = await readdir(extractedToPath);

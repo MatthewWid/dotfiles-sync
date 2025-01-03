@@ -7,6 +7,8 @@ import {
 } from "../lib/dropbox";
 import { DROPBOX_TAG_FILE } from "./constants";
 
+const { DROPBOX_DOTFILES_PATH: dropboxDotfilesPath } = process.env;
+
 const addFilesToFileList = (files: FileMetadata[], entries: FolderEntry[]) => {
 	const filtered = entries.filter(
 		({ ".tag": tag }) => tag === DROPBOX_TAG_FILE,
@@ -15,9 +17,7 @@ const addFilesToFileList = (files: FileMetadata[], entries: FolderEntry[]) => {
 	files.push(...filtered);
 };
 
-export const getFilesMetaRecursive = async (
-	path = process.env.DROPBOX_DOTFILES_PATH,
-): Promise<FileMetadata[]> => {
+export const getFilesMetaRecursive = async (): Promise<FileMetadata[]> => {
 	const dropbox = await getDropboxInstance();
 
 	const files: FileMetadata[] = [];
@@ -35,7 +35,7 @@ export const getFilesMetaRecursive = async (
 	};
 
 	const listFolderResponse = await dropbox.filesListFolder({
-		path,
+		path: dropboxDotfilesPath,
 		recursive: true,
 	});
 

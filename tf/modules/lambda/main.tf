@@ -38,7 +38,7 @@ data "aws_iam_policy_document" "logging" {
 
 # Policy for logging
 resource "aws_iam_policy" "logging" {
-  name   = "logging"
+  name   = "dotfiles_sync_logging"
   policy = data.aws_iam_policy_document.logging.json
 }
 
@@ -54,6 +54,34 @@ resource "aws_cloudwatch_log_group" "lambda" {
   retention_in_days = 14
 }
 
+# Allow Lambda to read and write Systems Manager Parameter Store parameters
+data "aws_iam_policy_document" "parameters" {
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "ssm:GetParameter",
+      "ssm:PutParameter"
+    ]
+
+    resources = [
+      var.parameter_store_dropbox_cursor_arn
+    ]
+  }
+}
+
+# Policy for parameters
+resource "aws_iam_policy" "parameters" {
+  name   = "dotfiles_sync_parameters"
+  policy = data.aws_iam_policy_document.parameters.json
+}
+
+# Attach parameter policy to Lambda role
+resource "aws_iam_role_policy_attachment" "parameters" {
+  policy_arn = aws_iam_policy.parameters.arn
+  role       = aws_iam_role.lambda.name
+}
+
 # Zip source code
 data "archive_file" "lambda" {
   type        = "zip"
@@ -63,11 +91,17 @@ data "archive_file" "lambda" {
 
 # Lambda function definition
 resource "aws_lambda_function" "sync" {
-  filename      = data.archive_file.lambda.output_path
-  function_name = "sync"
-  role          = aws_iam_role.lambda.arn
-  handler       = "main.handler"
-  runtime       = "nodejs22.x"
+  filename         = data.archive_file.lambda.output_path
+  function_name    = "sync"
+  role             = aws_iam_role.lambda.arn
+  handler          = "main.handler"
+  runtime          = "nodejs22.x"
+  source_code_hash = data.archive_file.lambda.output_base64sha256
+  environment {
+    variables = {
+      PARAMETER_STORE_DROPBOX_CURSOR_NAME = var.parameter_store_dropbox_cursor_name
+    }
+  }
 }
 
 # Call URL to invoke Lambda
