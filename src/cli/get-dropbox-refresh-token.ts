@@ -16,22 +16,15 @@ declare global {
 	}
 }
 
-assert("DROPBOX_APP_KEY" in process.env, "DROPBOX_APP_KEY");
-assert("DROPBOX_APP_SECRET" in process.env, "DROPBOX_APP_SECRET");
-assert("DROPBOX_ACCESS_CODE" in process.env, "DROPBOX_ACCESS_CODE");
+assert("DROPBOX_APP_KEY" in process.env, "Missing DROPBOX_APP_KEY");
+assert("DROPBOX_APP_SECRET" in process.env, "Missing DROPBOX_APP_SECRET");
+assert("DROPBOX_ACCESS_CODE" in process.env, "Missing DROPBOX_ACCESS_CODE");
 
 const {
 	DROPBOX_APP_KEY: appKey,
 	DROPBOX_APP_SECRET: appSecret,
 	DROPBOX_ACCESS_CODE: accessCode,
 } = process.env;
-
-if (!appKey || !appSecret || !accessCode) {
-	console.error(
-		"Usage: get-refresh-token <app-key> <app-secret> <access-code>",
-	);
-	process.exit(1);
-}
 
 /**
  * The official Dropbox npm package (`dropbox`) peculiarly does not provide a helper for acquiring a refresh token with an access code,
