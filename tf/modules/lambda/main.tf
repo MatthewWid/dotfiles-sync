@@ -96,6 +96,7 @@ resource "aws_lambda_function" "sync" {
   role             = aws_iam_role.lambda.arn
   handler          = "main.handler"
   runtime          = "nodejs22.x"
+  timeout          = 30
   source_code_hash = data.archive_file.lambda.output_base64sha256
   environment {
     variables = {
