@@ -98,6 +98,8 @@ resource "aws_lambda_function" "sync" {
   runtime          = "nodejs22.x"
   timeout          = 30
   source_code_hash = data.archive_file.lambda.output_base64sha256
+  # https://github.com/lambci/git-lambda-layer
+  layers = ["arn:aws:lambda:ap-southeast-2:553035198032:layer:git-lambda2:8"]
   environment {
     variables = {
       DROPBOX_APP_KEY                     = var.dropbox_app_key
