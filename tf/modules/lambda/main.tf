@@ -99,6 +99,12 @@ resource "aws_lambda_function" "sync" {
   source_code_hash = data.archive_file.lambda.output_base64sha256
   environment {
     variables = {
+      DROPBOX_APP_KEY                     = var.dropbox_app_key
+      DROPBOX_APP_SECRET                  = var.dropbox_app_secret
+      DROPBOX_REFRESH_TOKEN               = var.dropbox_refresh_token
+      DROPBOX_DOTFILES_PATH               = var.dropbox_dotfiles_path
+      GIT_REPO_LOCAL_PATH                 = var.git_repo_local_path
+      GIT_REPO_REMOTE_URL                 = var.git_repo_remote_url
       PARAMETER_STORE_DROPBOX_CURSOR_NAME = var.parameter_store_dropbox_cursor_name
     }
   }
