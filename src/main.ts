@@ -114,17 +114,4 @@ export const main = async () => {
 	}
 
 	await storeLatestDropboxCursor();
-
-	/*
-	const entries = await readdir(extractedToPath);
-
-	await Promise.all(
-		entries.map((entry) => {
-			const from = resolve(extractedToPath, entry);
-			const to = resolve(process.env.GIT_REPO_LOCAL_PATH, entry);
-
-			return rename(from, to);
-		})
-	);
-	*/
 };

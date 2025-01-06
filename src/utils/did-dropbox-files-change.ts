@@ -21,7 +21,7 @@ export const didDropboxFilesChange = async () => {
 
 		logger.debug(
 			{ parameterStoreDropboxCursorName },
-			"Attempting to fetch latest Dropbox cursor from Systems Manager Parameter Store"
+			"Attempting to fetch latest Dropbox cursor from Systems Manager Parameter Store",
 		);
 
 		try {
@@ -30,7 +30,7 @@ export const didDropboxFilesChange = async () => {
 			if (response.Parameter?.Value) {
 				logger.debug(
 					response,
-					"Successfully fetched Dropbox cursor from Systems Manager Parameter Store"
+					"Successfully fetched Dropbox cursor from Systems Manager Parameter Store",
 				);
 
 				cursor = response.Parameter.Value;
@@ -38,7 +38,7 @@ export const didDropboxFilesChange = async () => {
 		} catch (error) {
 			logger.debug(
 				error,
-				"Failed to fetch Dropbox cursor from Systems Manager Parameter Store"
+				"Failed to fetch Dropbox cursor from Systems Manager Parameter Store",
 			);
 		}
 	}
@@ -61,7 +61,7 @@ export const didDropboxFilesChange = async () => {
 
 	logger.info(
 		{ numberOfEntries: response.result.entries.length },
-		"Number of entries since initial cursor"
+		"Number of entries since initial cursor",
 	);
 
 	return hasEntries;

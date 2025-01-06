@@ -22,7 +22,7 @@ export const storeLatestDropboxCursor = async (): Promise<string> => {
 
 	logger.debug(
 		response,
-		"Latest cursor filesListFolderGetLatestCursor response"
+		"Latest cursor filesListFolderGetLatestCursor response",
 	);
 
 	if (parameterStoreDropboxCursorName) {
@@ -37,7 +37,7 @@ export const storeLatestDropboxCursor = async (): Promise<string> => {
 
 		logger.debug(
 			input,
-			"Attempting to store latest Dropbox cursor in Systems Manager Parameter Store"
+			"Attempting to store latest Dropbox cursor in Systems Manager Parameter Store",
 		);
 
 		const command = new PutParameterCommand(input);
@@ -46,12 +46,12 @@ export const storeLatestDropboxCursor = async (): Promise<string> => {
 			await ssm.send(command);
 
 			logger.info(
-				"Successfully stored Dropbox cursor in Systems Manager Parameter Store"
+				"Successfully stored Dropbox cursor in Systems Manager Parameter Store",
 			);
 		} catch (error) {
 			logger.info(
 				error,
-				"Failed to store Dropbox cursor in Systems Manager Parameter Store"
+				"Failed to store Dropbox cursor in Systems Manager Parameter Store",
 			);
 		}
 	}
