@@ -1,6 +1,6 @@
 # Role for Lambda
 resource "aws_iam_role" "lambda" {
-  name               = "lambda"
+  name               = "dotfiles_sync_lambda"
   assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
 }
 
@@ -92,7 +92,7 @@ data "archive_file" "lambda" {
 # Lambda function definition
 resource "aws_lambda_function" "sync" {
   filename         = data.archive_file.lambda.output_path
-  function_name    = "sync"
+  function_name    = "dotfiles_sync_sync"
   role             = aws_iam_role.lambda.arn
   handler          = "main.handler"
   runtime          = "nodejs22.x"

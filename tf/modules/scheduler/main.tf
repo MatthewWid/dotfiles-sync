@@ -1,6 +1,6 @@
 # EventBridge Scheduler Schedule definition
 resource "aws_scheduler_schedule" "invoke_lambda" {
-  name = "invoke_lambda"
+  name = "dotfiles_sync_invoke_lambda"
 
   flexible_time_window {
     mode = "OFF"
@@ -16,7 +16,7 @@ resource "aws_scheduler_schedule" "invoke_lambda" {
 
 # Role for Scheduler
 resource "aws_iam_role" "scheduler_invoke_lambda" {
-  name               = "schedule_invoke_lambda"
+  name               = "dotfiles_sync_schedule_invoke_lambda"
   assume_role_policy = data.aws_iam_policy_document.scheduler_assume_role.json
 }
 
@@ -51,7 +51,7 @@ data "aws_iam_policy_document" "invoke" {
 
 # Policy for invoking
 resource "aws_iam_policy" "invoke" {
-	name   = "invoke"
+	name   = "dotfiles_sync_invoke"
 	policy = data.aws_iam_policy_document.invoke.json
 }
 
