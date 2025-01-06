@@ -1,5 +1,9 @@
-import { PutParameterCommand } from "@aws-sdk/client-ssm";
+import {
+	PutParameterCommand,
+	type PutParameterCommandInput,
+} from "@aws-sdk/client-ssm";
 import { getDropboxInstance } from "../lib/dropbox";
+import { logger } from "../lib/pino";
 import { getSsmInstance } from "../lib/ssm";
 
 const {
@@ -16,18 +20,40 @@ export const storeLatestDropboxCursor = async (): Promise<string> => {
 		recursive: true,
 	});
 
+	logger.debug(
+		response,
+		"Latest cursor filesListFolderGetLatestCursor response"
+	);
+
 	if (parameterStoreDropboxCursorName) {
 		const ssm = await getSsmInstance();
 
-		const command = new PutParameterCommand({
+		const input: PutParameterCommandInput = {
 			Name: parameterStoreDropboxCursorName,
 			Value: response.result.cursor,
+			Type: "String",
 			Overwrite: true,
-		});
+		};
+
+		logger.debug(
+			input,
+			"Attempting to store latest Dropbox cursor in Systems Manager Parameter Store"
+		);
+
+		const command = new PutParameterCommand(input);
 
 		try {
 			await ssm.send(command);
-		} catch (error) {}
+
+			logger.info(
+				"Successfully stored Dropbox cursor in Systems Manager Parameter Store"
+			);
+		} catch (error) {
+			logger.info(
+				error,
+				"Failed to store Dropbox cursor in Systems Manager Parameter Store"
+			);
+		}
 	}
 
 	return response.result.cursor;

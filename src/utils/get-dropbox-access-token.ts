@@ -1,3 +1,5 @@
+import { logger } from "../lib/pino";
+
 const {
 	DROPBOX_APP_KEY: appKey,
 	DROPBOX_APP_SECRET: appSecret,
@@ -6,6 +8,11 @@ const {
 } = process.env;
 
 const fetchNewAccessToken = async () => {
+	logger.debug(
+		{ hasRefreshToken: Boolean(refreshToken) },
+		"Fetching new Dropbox access token",
+	);
+
 	const response = await fetch("https://api.dropboxapi.com/oauth2/token", {
 		method: "POST",
 		body: new URLSearchParams({
@@ -16,9 +23,11 @@ const fetchNewAccessToken = async () => {
 		}),
 	});
 
-	const json = (await response.json()) as { access_token: string };
+	const { access_token } = (await response.json()) as { access_token: string };
 
-	return json.access_token;
+	logger.debug({ access_token }, "Retrieved new Dropbox access token");
+
+	return access_token;
 };
 
 const isAccessTokenExpired = async () => {
@@ -37,6 +46,8 @@ const isAccessTokenExpired = async () => {
 };
 
 export const getDropboxAccessToken = async () => {
+	logger.debug({ initialAccessToken }, "Initial Dropbox access token");
+
 	if (!initialAccessToken || (await isAccessTokenExpired())) {
 		return await fetchNewAccessToken();
 	}

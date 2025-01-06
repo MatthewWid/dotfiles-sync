@@ -1,5 +1,6 @@
 import { GetParameterCommand } from "@aws-sdk/client-ssm";
 import { getDropboxInstance } from "../lib/dropbox";
+import { logger } from "../lib/pino";
 import { getSsmInstance } from "../lib/ssm";
 
 const {
@@ -18,16 +19,35 @@ export const didDropboxFilesChange = async () => {
 			Name: parameterStoreDropboxCursorName,
 		});
 
+		logger.debug(
+			{ parameterStoreDropboxCursorName },
+			"Attempting to fetch latest Dropbox cursor from Systems Manager Parameter Store"
+		);
+
 		try {
 			const response = await ssm.send(command);
 
 			if (response.Parameter?.Value) {
+				logger.debug(
+					response,
+					"Successfully fetched Dropbox cursor from Systems Manager Parameter Store"
+				);
+
 				cursor = response.Parameter.Value;
 			}
-		} catch (error) {}
+		} catch (error) {
+			logger.debug(
+				error,
+				"Failed to fetch Dropbox cursor from Systems Manager Parameter Store"
+			);
+		}
 	}
 
+	logger.debug({ cursor }, "Initial cursor value");
+
 	if (!cursor) {
+		logger.info("No cursor found. Files are assumed to have changed");
+
 		return true;
 	}
 
@@ -35,5 +55,14 @@ export const didDropboxFilesChange = async () => {
 
 	const response = await dropbox.filesListFolderContinue({ cursor });
 
-	return response.result.entries.length > 0;
+	logger.debug(response, "Initial cursor filesListFolderContinue response");
+
+	const hasEntries = response.result.entries.length > 0;
+
+	logger.info(
+		{ numberOfEntries: response.result.entries.length },
+		"Number of entries since initial cursor"
+	);
+
+	return hasEntries;
 };
