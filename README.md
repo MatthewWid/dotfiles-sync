@@ -1,6 +1,10 @@
 # Dotfiles Sync
 
-Use AWS [EventBridge](https://aws.amazon.com/eventbridge/) and [Lambda](https://aws.amazon.com/lambda/) to backup my personal dotfiles from Dropbox to GitHub and S3.
+Use AWS [EventBridge](https://aws.amazon.com/eventbridge/) and [Lambda](https://aws.amazon.com/lambda/) to automatically back up my personal dotfiles from Dropbox to GitHub.
+
+<p align="center"><img src="./docs/demo.gif" /></p>
+
+<p align="center">Scheduled Lambda mirrors changes from Dropbox to GitHub</p>
 
 ## Local Development
 
