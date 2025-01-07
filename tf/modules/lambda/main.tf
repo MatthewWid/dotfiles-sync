@@ -108,6 +108,8 @@ resource "aws_lambda_function" "sync" {
       DROPBOX_DOTFILES_PATH               = var.dropbox_dotfiles_path
       GIT_REPO_LOCAL_PATH                 = var.git_repo_local_path
       GIT_REPO_REMOTE_URL                 = var.git_repo_remote_url
+      GIT_REPO_CONFIG_EMAIL               = var.git_repo_config_email
+      GIT_REPO_CONFIG_NAME                = var.git_repo_config_name
       PARAMETER_STORE_DROPBOX_CURSOR_NAME = var.parameter_store_dropbox_cursor_name
     }
   }

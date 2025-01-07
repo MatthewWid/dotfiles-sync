@@ -61,7 +61,7 @@ export const didDropboxFilesChange = async () => {
 
 	logger.info(
 		{ numberOfEntries: response.result.entries.length },
-		"Number of entries since initial cursor",
+		"Number of changes since initial cursor",
 	);
 
 	return hasEntries;

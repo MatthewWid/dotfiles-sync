@@ -1,10 +1,10 @@
-import { existsSync as exists } from "node:fs";
 import { basename, join } from "node:path";
 import AdmZip from "adm-zip";
 import { getDropboxInstance } from "./lib/dropbox";
 import { getGitInstance } from "./lib/git";
 import { logger } from "./lib/pino";
 import { didDropboxFilesChange } from "./utils/did-dropbox-files-change";
+import { fetchGitRepository } from "./utils/fetch-git-repository";
 import { storeLatestDropboxCursor } from "./utils/store-latest-dropbox-cursor";
 
 declare global {
@@ -35,33 +35,13 @@ export const main = async () => {
 
 	if (!shouldRefetchFiles) {
 		logger.info("No file changes detected. Aborting");
+
+		await storeLatestDropboxCursor();
+
 		return;
 	}
 
-	const git = await getGitInstance();
-
-	if (exists(join(process.env.GIT_REPO_LOCAL_PATH, ".git"))) {
-		logger.info(
-			{ GIT_REPO_LOCAL_PATH: process.env.GIT_REPO_LOCAL_PATH },
-			"Git local repository already exists. Fetching latest changes",
-		);
-
-		await git.fetch();
-	} else {
-		logger.info(
-			{
-				GIT_REPO_REMOTE_URL: process.env.GIT_REPO_REMOTE_URL,
-				GIT_REPO_LOCAL_PATH: process.env.GIT_REPO_LOCAL_PATH,
-			},
-			"Git local repository does not exist. Cloning repository",
-		);
-
-		await git.clone(
-			process.env.GIT_REPO_REMOTE_URL,
-			process.env.GIT_REPO_LOCAL_PATH,
-			["--no-checkout"],
-		);
-	}
+	await fetchGitRepository();
 
 	const dropbox = await getDropboxInstance();
 
@@ -96,6 +76,8 @@ export const main = async () => {
 		{ extractedToPath },
 		"Dropbox zip file contents extracted to repository path",
 	);
+
+	const git = await getGitInstance();
 
 	const { isClean } = await git.status(["--", extractedToPath]);
 

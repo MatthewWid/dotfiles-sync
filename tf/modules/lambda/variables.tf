@@ -24,6 +24,16 @@ variable "git_repo_remote_url" {
   type = string
 }
 
+variable "git_repo_config_name" {
+  type    = string
+  default = "Matthew W."
+}
+
+variable "git_repo_config_email" {
+  type    = string
+  default = "matthew.widdi@gmail.com"
+}
+
 variable "parameter_store_dropbox_cursor_name" {
   type = string
 }

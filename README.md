@@ -83,6 +83,8 @@ Use AWS [EventBridge](https://aws.amazon.com/eventbridge/) and [Lambda](https://
 |`DROPBOX_DOTFILES_PATH`|No (`/dotfiles`)|Remote path to the dotfiles folder in your Dropbox account.|
 |`GIT_REPO_LOCAL_PATH`|No (`/tmp/dotfiles`)|Local path to clone the Git repository into.|
 |`GIT_REPO_REMOTE_URL`|No (`https://github.com/MatthewWid/dotfiles`)|URL of the Git remote to pull and push files from and to.<br><br>Should include authentication details that grant permission to read and write repository contents (Eg, `https://<USERNAME>:<PERSONAL ACCESS TOKEN>@github.com/MatthewWid/dotfiles`).|
+|`GIT_REPO_CONFIG_NAME`|No (`Matthew W.`)|Git author name used when creating new commits.|
+|`GIT_REPO_CONFIG_EMAIL`|No (`matthew.widdi@gmail.com`)|Git author email used when creating new commits.|
 |`PARAMETER_STORE_DROPBOX_CURSOR_NAME`|No (`dotfiles_sync_dropbox_cursor`)|Name of the [AWS Systems Manager Parameter Store](https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-parameter-store.html) parameter that stores the latest [folder cursor](https://www.dropbox.com/developers/documentation/http/documentation#files-list_folder-get_latest_cursor) returned from Dropbox.|
 |`PARAMETER_STORE_DROPBOX_CURSOR_DEFAULT_VALUE`|No|Default value for the retrieved Dropbox folder cursor if none is found in Parameter Store.|
 
