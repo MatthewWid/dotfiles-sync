@@ -8,9 +8,11 @@ Use AWS [EventBridge](https://aws.amazon.com/eventbridge/) and [Lambda](https://
 
 ## Local Development
 
-1. Install the [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) and set up your [access credentials](https://docs.aws.amazon.com/cli/v1/userguide/cli-chap-authentication.html).
+1. Install [Terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli).
 
-2. Install [Terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli).
+2. Install the [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) and set up your [access credentials](https://docs.aws.amazon.com/cli/v1/userguide/cli-chap-authentication.html).
+
+    Set your [profile name](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-quickstart.html#getting-started-quickstart-new-file) to `personal-iamadmin-development` or otherwise set the `aws_profile` [Terraform variable](https://developer.hashicorp.com/terraform/language/values/variables#assigning-values-to-root-module-variables) to your own profile name.
 
 3. Install [Node](https://nodejs.org/en/learn/getting-started/how-to-install-nodejs).
 
@@ -57,7 +59,18 @@ Use AWS [EventBridge](https://aws.amazon.com/eventbridge/) and [Lambda](https://
     pnpm run build
     ```
 
-10. Deploy to AWS with Terraform:
+10. [Create an S3 bucket](https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html) to store the Terraform state file and set the bucket name and region in the `backend` block in `tf/versions.tf`.
+
+11. Copy the following environment variables from `.env` to [`tf/.auto.tfvars`](https://developer.hashicorp.com/terraform/cloud-docs/workspaces/variables#7-local-environment-variables-prefixed-with-tf_var_):
+
+    ```
+    DROPBOX_APP_KEY=value         ->    dropbox_app_key = "value"
+    DROPBOX_APP_SECRET=value      ->    dropbox_app_secret = "value"
+    DROPBOX_REFRESH_TOKEN=value   ->    dropbox_refresh_token = "value"
+    GIT_REPO_REMOTE_URL=value     ->    git_repo_remote_url = "value"
+    ```
+
+11. Deploy to AWS with Terraform:
 
     ```bash
     cd tf
