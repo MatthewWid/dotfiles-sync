@@ -17,7 +17,8 @@ module "lambda" {
   parameter_store_dropbox_cursor_arn  = module.parameter_store.dropbox_cursor_arn
 }
 
-# module "scheduler" {
-# source = "./modules/scheduler"
-# lambda_arn = module.lambda.lambda_arn
-# }
+module "scheduler" {
+  source             = "./modules/scheduler"
+  lambda_arn         = module.lambda.lambda_arn
+  lambda_invoke_rate = var.lambda_invoke_rate
+}

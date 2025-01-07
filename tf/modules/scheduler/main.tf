@@ -36,27 +36,27 @@ data "aws_iam_policy_document" "scheduler_assume_role" {
 
 # Allow Scheduler to invoke Lambda
 data "aws_iam_policy_document" "invoke" {
-	statement {
-		effect = "Allow"
+  statement {
+    effect = "Allow"
 
-		actions = [
-			"lambda:InvokeFunction"
-		]
+    actions = [
+      "lambda:InvokeFunction"
+    ]
 
-		resources = [
-			var.lambda_arn
-		]
-	}
+    resources = [
+      var.lambda_arn
+    ]
+  }
 }
 
 # Policy for invoking
 resource "aws_iam_policy" "invoke" {
-	name   = "dotfiles_sync_invoke"
-	policy = data.aws_iam_policy_document.invoke.json
+  name   = "dotfiles_sync_invoke"
+  policy = data.aws_iam_policy_document.invoke.json
 }
 
 # Attach invoke policy to Scheduler role
 resource "aws_iam_role_policy_attachment" "invoke" {
-	policy_arn = aws_iam_policy.invoke.arn
-	role       = aws_iam_role.scheduler_invoke_lambda.name
+  policy_arn = aws_iam_policy.invoke.arn
+  role       = aws_iam_role.scheduler_invoke_lambda.name
 }

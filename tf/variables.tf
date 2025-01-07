@@ -27,3 +27,8 @@ variable "git_repo_remote_url" {
   type      = string
   sensitive = true
 }
+
+variable "lambda_invoke_rate" {
+	type    = string
+	default = "1 day"
+}
