@@ -12,7 +12,8 @@
 		"format": "biome check --write",
 		"lint": "biome lint",
 		"ci": "biome ci",
-		"get-dropbox-refresh-token": "tsx --env-file ./.env ./src/cli/get-dropbox-refresh-token.ts"
+		"get-dropbox-refresh-token": "tsx --env-file ./.env ./src/cli/get-dropbox-refresh-token.ts",
+		"delete-dropbox-cursor-parameter": "tsx --env-file ./.env ./src/cli/delete-dropbox-cursor-parameter.ts"
 	},
 	"engines": {
 		"node": ">=22",

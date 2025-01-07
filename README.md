@@ -70,6 +70,8 @@ Use AWS [EventBridge](https://aws.amazon.com/eventbridge/) and [Lambda](https://
 |`start`|Run the Lambda function locally.|
 |`dev`|Run the Lambda function locally in watch mode.|
 |`build`|Bundle the Lambda function source for distribution with [esbuild](https://esbuild.github.io/).|
+|`get-dropbox-refresh-token`|Exchange a short-lived Dropbox access code for a long-lived refresh token.|
+|`delete-dropbox-cursor-parameter`|Delete the Dropbox folder cursor stored in Parameter Store.|"
 
 ### Environment Variables
 
