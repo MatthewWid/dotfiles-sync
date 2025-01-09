@@ -1,0 +1,47 @@
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+            node-version-file: "package.json"
+            cache: "pnpm"
+      - run: pnpm install
+      - run: pnpm build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lambda-dist-bundle
+          path: dist
+          if-no-files-found: error
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: tf
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      TF_VAR_dropbox_app_key: ${{ secrets.DROPBOX_APP_KEY }}
+      TF_VAR_dropbox_app_secret: ${{ secrets.DROPBOX_APP_SECRET }}
+      TF_VAR_dropbox_refresh_token: ${{ secrets.DROPBOX_REFRESH_TOKEN }}
+      TF_VAR_git_repo_remote_url: ${{ secrets.GIT_REPO_REMOTE_URL }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: lambda-dist-bundle
+          path: dist
+      - uses: hashicorp/setup-terraform@v3
+      - run: terraform init
+      - run: terraform fmt -check
+      - run: terraform validate
+      - run: terraform plan -no-color -input=false
+      - run: terraform apply -auto-approve -input=false
