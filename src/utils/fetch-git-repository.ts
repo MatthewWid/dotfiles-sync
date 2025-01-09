@@ -32,6 +32,7 @@ export const fetchGitRepository = async () => {
 		);
 	}
 
+	await git.reset(["--", ".", ":!dotfiles"]);
 	await git.addConfig("user.name", configName);
 	await git.addConfig("user.email", configEmail);
 };
