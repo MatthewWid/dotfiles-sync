@@ -33,7 +33,13 @@ export const didDropboxFilesChange = async () => {
 					"Successfully fetched Dropbox cursor from Systems Manager Parameter Store",
 				);
 
-				cursor = response.Parameter.Value;
+				if (response.Parameter.Value === "null") {
+					logger.debug(
+						"Fetched cursor value is null. Aborting setting initial value",
+					);
+				} else {
+					cursor = response.Parameter.Value;
+				}
 			}
 		} catch (error) {
 			logger.debug(
