@@ -114,9 +114,3 @@ resource "aws_lambda_function" "sync" {
     }
   }
 }
-
-# Call URL to invoke Lambda
-resource "aws_lambda_function_url" "sync_url" {
-  function_name      = aws_lambda_function.sync.function_name
-  authorization_type = "NONE"
-}
