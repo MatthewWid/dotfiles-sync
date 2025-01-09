@@ -1,9 +1,9 @@
 terraform {
-	backend "s3" {
-		bucket = "dotfiles-sync-tfstate"
-		key = "terraform.tfstate"
-		region = "ap-southeast-2"
-	}
+  backend "s3" {
+    bucket = "dotfiles-sync-tfstate"
+    key    = "terraform.tfstate"
+    region = "ap-southeast-2"
+  }
 
   required_providers {
     aws = {
